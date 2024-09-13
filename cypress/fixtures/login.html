@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #ff3f3f;
+            --bg-gradient: linear-gradient(to right, #8A2387, #E94057, #F27121);
+            --form-bg: rgba(255, 255, 255, 0.1);
+            --form-focus-bg: rgba(255, 255, 255, 0.3);
+            --form-color: #fff;
+        }
+        body {
+            background: var(--bg-gradient);
+            color: var(--form-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+        }
+        .login-container {
+            background: var(--form-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--form-color);
+        }
+        .form-control:focus {
+            background: var(--form-focus-bg);
+            color: var(--form-color);
+            box-shadow: none;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        .footer-section {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        .sign-up-section {
+            margin-top: 20px;
+        }
+        .sign-up-link, .reset-password-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .sign-up-link:hover, .reset-password-link:hover {
+            color: var(--secondary-color);
+        }
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            .login-container {
+                padding: 30px;
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Login</h2>
+    <p>Welcome back! Ready to achieve more? 🌟</p>
+    <form th:action="@{/api/users/login}" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> <!-- CSRF token as hidden field -->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+    <div class="footer-section">
+        <p th:if="${param.error}" th:text="${errorMessage ?: 'Incorrect username or password.'}"></p>
+        <a href="/request-password-reset" class="reset-password-link">Forgot password?</a>
+    </div>
+
+    <div class="footer-section">
+        <p>&copy; 2024 Nepal Engineering License Exam Preparation. All Rights Reserved.</p>
+    </div>
+    <div class="sign-up-section">
+        <p>Not a user? <a href="/signup" class="sign-up-link">Sign up here</a></p>
+    </div>
+</div>
+</body>
+</html>

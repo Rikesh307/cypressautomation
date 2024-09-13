@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta th:replace="~{fragments :: favicon-links}" />
+
+    <title>All Questions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
+    <script th:inline="none">
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+            color: #000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .question-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            color: #000;
+        }
+
+        .question-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-number {
+            font-size: 1.5em;
+            color: #000;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label {
+            font-size: 1em;
+            color: #000;
+            display: flex;
+            align-items: center;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            flex-grow: 1;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+            margin-top: 0;
+        }
+
+        .answer, .explanation {
+            font-size: 1.1em;
+            color: #000;
+            margin-top: 15px;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4">All Questions</h1>
+    <div th:each="question, iterStat : ${questions}" class="question-card mb-4 p-3 bg-light rounded">
+        <div class="question-number">Question <span th:text="${iterStat.count}">1</span></div>
+        <div class="question-text" th:utext="${question.question}">Question Text</div>
+        <div th:if="${question.image != 'null'}">
+            <img th:src="'data:image/png;base64,' + ${question.image}" alt="Question Image" class="img-fluid">
+        </div>
+        <div class="options">
+            <div th:each="option, optionStat : ${question.options}" class="form-check">
+                <label>
+                    <input type="radio" th:id="'option_' + ${question.id} + '_' + ${optionStat.index}" th:name="'question_' + ${question.id}" th:value="${option.text}" class="form-check-input">
+                </label>
+                <label class="form-check-label" th:for="'option_' + ${question.id} + '_' + ${optionStat.index}">
+                    <span th:utext="${option.text}">Option Text</span>
+                    <div th:if="${option.image != 'null'}">
+                        <img th:src="'data:image/png;base64,' + ${option.image}" alt="Option Image" class="img-fluid">
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="answer mt-2">
+            <strong>Answer:</strong>
+            <span th:utext="${question.answer}">Answer</span>
+        </div>
+        <div class="explanation mt-2">
+            <strong>Explanation:</strong>
+            <div th:utext="${question.explanation.text}">Explanation text</div>
+            <div th:if="${question.explanation.image != 'null'}">
+                <img th:src="'data:image/png;base64,' + ${question.explanation.image}" alt="Explanation Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
